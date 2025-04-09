@@ -1,4 +1,19 @@
+
+# React frontend 用
+FE/authfront/node_modules/
+FE/authfront/build/
+FE/authfront/dist/
+FE/authfront/.env
+FE/authfront/*.log
+
+# Python backend 用
 venv/
 __pycache__/
 *.pyc
 .env
+
+# 共通
+.DS_Store
+*.log
+
+/node_modules/
