@@ -1,0 +1,31 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const ProtectedPage = () => {
+  const navigate = useNavigate();
+
+    // tokenを検証している
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = localStorage.getItem('token');
+        console.log(token)
+      try {
+        const response = await fetch(`http://localhost:8000/verify-token/${token}`);
+
+        if (!response.ok) {
+          throw new Error('Token verification failed');
+        }
+      } catch (error) {
+        localStorage.removeItem('token');
+        navigate('/');
+      }
+    };
+
+    verifyToken();
+  }, [navigate]);
+
+  return <div>This is a protected page. Only visible to authenticated users.</div>;
+
+}
+
+export default ProtectedPage;

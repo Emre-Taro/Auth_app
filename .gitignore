@@ -2,3 +2,9 @@ venv/
 __pycache__/
 *.pyc
 .env
+
+# React/Node.js 用
+node_modules/
+dist/
+build/
+*.log
