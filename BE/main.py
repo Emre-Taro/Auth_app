@@ -71,8 +71,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already registered")
     return create_user(db=db, user=user)
 
-
-
+# ハッシュの値と照合する
 def authenticate_user(username: str, password: str, db: Session):
     user = get_user_by_username(db, username=username).first()
     if not user:
@@ -81,6 +80,7 @@ def authenticate_user(username: str, password: str, db: Session):
         return False
     return user
 
+# JWTトークンを発行している（ここでどのくらいの期間一時保存できるかを定義している）
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
@@ -91,7 +91,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-
+# トークンの検証
 def verify_token(token: str = Depends(oauth2_schema)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -116,6 +116,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
+    # {"sub": user.username}が入ったデータを返している
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/verify_token/{token}")
